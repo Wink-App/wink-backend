@@ -1,5 +1,6 @@
-import { Table, Model, Column, DataType, Default } from 'sequelize-typescript';
+import { Table, Model, Column, DataType, Default, HasMany } from 'sequelize-typescript';
 import { UserRole } from 'src/auth/enum/userRoles.enum';
+import { Address } from './address.model';
 
 @Table({
   modelName: 'user',
@@ -13,6 +14,9 @@ export class User extends Model<User> {
     comment: 'User ID',
   })
   id: string;
+  // Define the association with the Address model
+  @HasMany(() => Address)
+  addresses: Address[];
 
   @Column({
     type: DataType.STRING,
@@ -113,4 +117,6 @@ export class User extends Model<User> {
     comment: 'User status',
   })
   status: string;
+
+ 
 }
