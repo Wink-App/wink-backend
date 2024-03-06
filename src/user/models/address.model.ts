@@ -18,6 +18,7 @@ export class Address extends Model<Address> {
   @Column({
     type: DataType.UUID,
     comment: 'User ID',
+    field: 'user_id', // Specify the foreign key name
   })
   userId: string;
 

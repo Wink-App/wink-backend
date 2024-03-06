@@ -1,6 +1,6 @@
-// product.model.ts
-
-import { Table, Model, Column, DataType } from 'sequelize-typescript';
+import { Table, Model, Column, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Category } from 'src/category/models/category.model';
+import { Store } from 'src/store/models/store.model';
 
 @Table({
   modelName: 'product',
@@ -14,6 +14,30 @@ export class Product extends Model<Product> {
     comment: 'Product ID',
   })
   id: string;
+  @ForeignKey(() => Category) 
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+    comment: 'Category ID',
+  })
+  categoryId: string;
+  @BelongsTo(() => Category) // Define association with Category model
+  category: Category;
+
+  @ForeignKey(() => Store) 
+  @Column({
+    type: DataType.UUID,
+    allowNull: false,
+    comment: 'Store ID',
+  })
+  storeId: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    comment: 'Product Variant',
+  })
+  variant: string;
 
   @Column({
     type: DataType.STRING,
@@ -22,26 +46,20 @@ export class Product extends Model<Product> {
   })
   productName: string;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-    comment: 'Product Category',
-  })
-  category: string;
+ 
 
   @Column({
-    type: DataType.DECIMAL(10, 2),
+    type: DataType.FLOAT,
     allowNull: false,
     comment: 'Product Price',
   })
   price: number;
 
   @Column({
-    type: DataType.JSON,
+    type: DataType.STRING,
     comment: 'Product Image',
   })
   productImage: string;
-
 
   @Column({
     type: DataType.INTEGER,
@@ -52,7 +70,7 @@ export class Product extends Model<Product> {
   stockQuantity: number;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
     comment: 'Product Description',
   })
   productDescription: string;
