@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, BadRequestException, Query, UseGuards } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { ProductService } from './product.service';
 import { ProductDto } from './dto/product.dto';
 import { UserRole } from 'src/auth/enum/userRoles.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/role.guard';
 
 @Controller('product')
 export class ProductController {
@@ -13,6 +16,8 @@ export class ProductController {
     logger.setContext(ProductController.name);
   }
 
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   async create(@Body() productDto: ProductDto) {
     try {
@@ -22,6 +27,8 @@ export class ProductController {
     }
   }
 
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() productDto: ProductDto) {
     try {
@@ -31,6 +38,8 @@ export class ProductController {
     }
   }
  
+  @Roles(UserRole.SELLER, UserRole.ADMIN,  UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
@@ -40,15 +49,19 @@ export class ProductController {
     }
   }
 
+  @Roles(UserRole.SELLER, UserRole.ADMIN, UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
-  async findAll() {
+  async findAll(@Query() queryParams: any) {
     try {
-      return await this.productService.findAll();
+      return await this.productService.findAll(queryParams);
     } catch (error) {
       throw new NotFoundException(error.message);
     }
   }
 
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {

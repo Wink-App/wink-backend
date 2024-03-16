@@ -1,7 +1,9 @@
 import { Table, Model, Column, DataType, HasMany, BelongsToMany } from 'sequelize-typescript';
 import { Product } from 'src/product/models/product.model';
-import { StoreCategory } from 'src/store/models/store-categories.model';
+
 import { Store } from 'src/store/models/store.model';
+import { StoreCategory } from 'src/store/models/store_categories.model';
+
 
 @Table({
   modelName: 'category',
@@ -24,6 +26,7 @@ stores: Store[];
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    unique: true,
     comment: 'Category name',
   })
   categoryName: string;

@@ -28,8 +28,12 @@ export class CategoryController {
   ) {
     logger.setContext(CategoryController.name);
   }
-   @Roles(UserRole.SELLER)
-   @UseGuards(JwtAuthGuard, RolesGuard)
+  //  @Roles(UserRole.SELLER)
+  //  @UseGuards(JwtAuthGuard, RolesGuard)
+  //commenting permission for adding category
+
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   async create(@Body() categoryDto: CategoryDto) {
     try {
@@ -39,6 +43,8 @@ export class CategoryController {
     }
   }
 
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() categoryDto: CategoryDto) {
     try {
@@ -47,7 +53,8 @@ export class CategoryController {
       throw new NotFoundException(error.message);
     }
   }
-
+ @Roles(UserRole.SELLER, UserRole.ADMIN,  UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
@@ -56,12 +63,14 @@ export class CategoryController {
       throw new NotFoundException(error.message);
     }
   }
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN,  UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   async findAll() {
     return await this.categoryService.findAll();
   }
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {

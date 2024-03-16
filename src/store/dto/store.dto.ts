@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsOptional, IsUUID, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsUUID, IsEmail, IsArray } from 'class-validator';
 
 export class StoreDto {
   @IsNotEmpty({ message: 'Store name must not be empty' })
@@ -37,4 +37,7 @@ export class StoreDto {
   @IsOptional()
   @IsUUID(4, { message: 'Invalid UUID format for updatedBy' })
   updatedBy: string | null;
+
+  @IsArray({ message: 'Category IDs must be provided as an array' })
+  categoryIds: string[];
 }
