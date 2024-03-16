@@ -1,7 +1,8 @@
-import { Table, Model, Column, DataType, HasMany, BelongsToMany } from 'sequelize-typescript';
+import { Table, Model, Column, DataType, HasMany, BelongsToMany, HasOne, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Category } from 'src/category/models/category.model';
 import { Product } from 'src/product/models/product.model';
-import { StoreCategory } from './store-categories.model';
+import { StoreCategory } from 'src/store/models/store_categories.model';
+import { User } from 'src/user/models/user.model';
 
 @Table({
   modelName: 'store',
@@ -16,12 +17,17 @@ export class Store extends Model<Store> {
   })
   id: string;
 
+  @ForeignKey(() => User)
   @Column({
-    type: DataType.STRING,
-    allowNull: true,
+    type: DataType.UUID, // Assuming User.id is UUID
+   
     comment: 'Seller or user id of the store',
   })
   userId: string;
+
+  // Define the association with the User model
+  @BelongsTo(() => User)
+  user: User;
   @HasMany(() => Product) // Define one-to-many relationship with Product model
   products: Product[];
 

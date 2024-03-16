@@ -48,10 +48,14 @@ import { ProductModule } from './product/product.module';
       ): Promise<SequelizeModuleOptions> => ({
         dialect: 'postgres',
         dialectOptions: {
-          ssl: {
+          
+          ssl:  configService.get<string>('NODE_ENV') !== 'production'
+          ? false
+          :  {
             require: true, // This will help you. But you will see nwe error
             rejectUnauthorized: false, // This line will fix new error
           },
+          
         },
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),

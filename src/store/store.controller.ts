@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, BadRequestException, UseGuards } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
 import { StoreService } from './store.service';
 import { StoreDto } from './dto/store.dto';
-
+import { UserRole } from 'src/auth/enum/userRoles.enum';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/role.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 @Controller('store')
 export class StoreController {
   constructor(
@@ -11,7 +14,10 @@ export class StoreController {
   ) {
     logger.setContext(StoreController.name);
   }
-
+  
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+ 
   @Post()
   async create(@Body() storeDto: StoreDto) {
     try {
@@ -20,7 +26,8 @@ export class StoreController {
       throw new BadRequestException(error.message);
     }
   }
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() storeDto: StoreDto) {
     try {
@@ -29,7 +36,8 @@ export class StoreController {
       throw new NotFoundException(error.message);
     }
   }
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN,  UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     try {
@@ -38,7 +46,8 @@ export class StoreController {
       throw new NotFoundException(error.message);
     }
   }
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN,  UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   async findAll() {
     try {
@@ -47,7 +56,8 @@ export class StoreController {
       throw new NotFoundException(error.message);
     }
   }
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
     try {

@@ -16,6 +16,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { AddressDto } from './dto/address.dto';
+import { RolesGuard } from 'src/auth/guards/role.guard';
+import { UserRole } from 'src/auth/enum/userRoles.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('user')
 export class UserController {
@@ -52,26 +55,31 @@ export class UserController {
   // remove(@Param('id') id: string) {
   //   return this.userService.remove(+id);
   // }
-  @UseGuards(JwtAuthGuard)
-  @Post(':userId/profile')
+  @Roles(UserRole.SELLER, UserRole.ADMIN ,UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+ @Post(':userId/profile')
   async addProfile(@Param('userId') userId: string, @Body() addressData: AddressDto) {
     return this.userService.addProfile(userId, addressData);
   }
 
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.SELLER, UserRole.ADMIN ,UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':userId/profile')
   async updateProfile(@Param('userId') userId: string, @Body() addressData: AddressDto) {
     return this.userService.updateProfile(userId, addressData);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(UserRole.SELLER, UserRole.ADMIN , UserRole.USER)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':userId/profile')
   async findOneProfile(@Param('userId') userId: string) {
     return this.userService.findOneProfile(userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+
+  @Roles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('profiles')
   async findAllProfiles() {
    
@@ -79,7 +87,8 @@ export class UserController {
     return this.userService.findAllProfiles();
   }
   
-
+  @Roles(UserRole.SELLER, UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete(':userId/profile')
   async deleteProfile(@Param('userId') userId: string) {
     return this.userService.deleteProfile(userId);
