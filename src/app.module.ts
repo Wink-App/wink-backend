@@ -47,6 +47,12 @@ import { ProductModule } from './product/product.module';
         logger: PinoLogger,
       ): Promise<SequelizeModuleOptions> => ({
         dialect: 'postgres',
+        dialectOptions: {
+          ssl: {
+            require: true, // This will help you. But you will see nwe error
+            rejectUnauthorized: false, // This line will fix new error
+          },
+        },
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USERNAME'),
