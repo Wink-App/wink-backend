@@ -90,16 +90,21 @@ export class UserService {
   async findOneProfile(userId: string) {
     this.logger.info('UserService#findOneProfile');
     try {
-      const address = await this.addressRepo.findOne({ where: { userId } });
-      if (!address) {
-        throw new NotFoundException('Address not found');
-      }
-      return address;
+        const userProfile = await User.findOne({
+            where: { id: userId },
+            include: [Address],
+            attributes: { exclude: ['password'] }
+        });
+        if (!userProfile) {
+            throw new NotFoundException('User profile not found');
+        }
+        return userProfile;
     } catch (error) {
-      this.logger.error(`Error occurred while finding profile for user ${userId}: ${error.message}`);
-      throw error;
+        this.logger.error(`Error occurred while finding profile for user ${userId}: ${error.message}`);
+        throw error;
     }
-  }
+}
+
   async findAllProfiles() {
     this.logger.info('UserService#findAllProfiles');
     try {

@@ -1,5 +1,6 @@
 import { Table, Model, Column, DataType, Default, HasMany } from 'sequelize-typescript';
 import { UserRole } from 'src/auth/enum/userRoles.enum';
+import { Order } from 'src/order/models/order.model';
 import { Address } from './address.model';
 
 @Table({
@@ -17,6 +18,9 @@ export class User extends Model<User> {
   // Define the association with the Address model
   @HasMany(() => Address)
   addresses: Address[];
+   // Add the following association
+  @HasMany(() => Order)
+  orders: Order[];
 
   @Column({
     type: DataType.STRING,

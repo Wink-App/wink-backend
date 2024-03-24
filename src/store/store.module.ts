@@ -7,13 +7,15 @@ import { AuthModule } from 'src/auth/auth.module';
 import { StoreController } from './store.controller';
 import { StoreService } from './store.service';
 import { Store } from './models/store.model';
+import { StoreCategory } from './models/store_categories.model';
+
 
 @Module({
   imports: [
     AuthModule,
     ConfigModule.forRoot(),
     LoggerModule,
-    SequelizeModule.forFeature([Store]),
+    SequelizeModule.forFeature([Store, StoreCategory]),
   ],
   controllers: [StoreController],
   providers: [StoreService], // Add UserService to the providers array

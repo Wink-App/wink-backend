@@ -1,5 +1,6 @@
-import { Table, Model, Column, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Model, Column, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { Category } from 'src/category/models/category.model';
+import { Order } from 'src/order/models/order.model';
 import { Store } from 'src/store/models/store.model';
 
 @Table({
@@ -23,6 +24,9 @@ export class Product extends Model<Product> {
   categoryId: string;
   @BelongsTo(() => Category) // Define association with Category model
   category: Category;
+
+  @HasMany(() => Order) // Define the association with the Order model
+  orders: Order[];
 
   @ForeignKey(() => Store) 
   @Column({

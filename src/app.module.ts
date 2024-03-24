@@ -10,6 +10,10 @@ import { AppService } from './app.service';
 import { CategoryModule } from './category/category.module';
 import { StoreModule } from './store/store.module';
 import { ProductModule } from './product/product.module';
+import { FeedbackModule } from './feedback/feedback.module';
+import { RatingModule } from './rating/rating.module';
+import { orderModule } from './order/order.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -47,6 +51,16 @@ import { ProductModule } from './product/product.module';
         logger: PinoLogger,
       ): Promise<SequelizeModuleOptions> => ({
         dialect: 'postgres',
+        dialectOptions: {
+          
+          ssl:  configService.get<string>('NODE_ENV') !== 'production'
+          ? false
+          :  {
+            require: true, // This will help you. But you will see nwe error
+            rejectUnauthorized: false, // This line will fix new error
+          },
+          
+        },
         host: configService.get<string>('DB_HOST'),
         port: configService.get<number>('DB_PORT'),
         username: configService.get<string>('DB_USERNAME'),
@@ -71,6 +85,10 @@ import { ProductModule } from './product/product.module';
     CategoryModule,
     StoreModule,
     ProductModule,
+    FeedbackModule,
+    RatingModule,
+    orderModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [
