@@ -52,12 +52,12 @@ export class AuthService {
 
  // auth.service.ts
 
- async login(user: User): Promise<{ role: string, token: string }> {
+ async login(user: User): Promise<{ role: string, token: string,  userId: string }> {
   try {
     const payload = { sub: user.id, email: user.email, role: user.role }; // Include role in the payload
     const token = this.jwtService.sign(payload);
     console.log('Generated JWT token:', token); // Add this log
-    return { role: user.role, token };
+    return { userId: user.id, role: user.role, token };
   } catch (error) {
     console.error('Error generating JWT token:', error.message);
     throw new UnauthorizedException('Login failed. Please try again later.');

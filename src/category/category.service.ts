@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { PinoLogger } from 'nestjs-pino';
+import { PushNotificationService } from 'src/notification/push-notification.service';
 import { CategoryDto } from './dto/category.dto';
 import { Category } from './models/category.model';
 
@@ -10,6 +11,7 @@ export class CategoryService {
     @InjectModel(Category)
     private readonly categoryModel: typeof Category,
     private readonly logger: PinoLogger,
+   
   ) {
     logger.setContext(CategoryService.name);
   }
@@ -17,6 +19,7 @@ export class CategoryService {
   async create(categoryDto: CategoryDto): Promise<{ status: number; message: string; data: Category }> {
     try {
       const createdCategory = await this.categoryModel.create(categoryDto);
+     
       return { status: HttpStatus.CREATED, message: 'Category created successfully', data: createdCategory };
     } catch (error) {
       this.logger.error(`Error occurred while creating category: ${error.message}`);

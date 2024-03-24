@@ -10,6 +10,10 @@ import { AppService } from './app.service';
 import { CategoryModule } from './category/category.module';
 import { StoreModule } from './store/store.module';
 import { ProductModule } from './product/product.module';
+import { FeedbackModule } from './feedback/feedback.module';
+import { RatingModule } from './rating/rating.module';
+import { orderModule } from './order/order.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -81,6 +85,10 @@ import { ProductModule } from './product/product.module';
     CategoryModule,
     StoreModule,
     ProductModule,
+    FeedbackModule,
+    RatingModule,
+    orderModule,
+    NotificationModule
   ],
   controllers: [AppController],
   providers: [

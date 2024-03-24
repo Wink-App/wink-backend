@@ -78,7 +78,7 @@ export class UserController {
   }
 
 
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.SELLER)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('profiles')
   async findAllProfiles() {
