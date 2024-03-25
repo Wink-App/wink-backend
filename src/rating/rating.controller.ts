@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards, Patch } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RatingDTO } from './dto/rating.dto';
 import { RatingService } from './rating.service';
@@ -48,7 +48,7 @@ export class RatingController {
     }
   }
 
-  @Put(':id')
+  @Patch(':id') // Change @Put to @Patch
   async update(@Param('id') id: string, @Body() ratingDto: RatingDTO): Promise<{ status: number; message: string; data: any }> {
     try {
       const result = await this.ratingService.updateRating(id, ratingDto);

@@ -59,6 +59,8 @@ export class RatingService {
         throw { status: 404, message: 'Rating not found' };
       }
       const updatedRating = await this.ratingModel.findByPk(id);
+      
+      // Return the updated rating data
       return { status: 200, message: 'Rating updated successfully', data: updatedRating };
     } catch (error) {
       throw { status: error.status || 500, message: error.message || 'Error updating rating', error };

@@ -50,6 +50,8 @@ export class FeedbackService {
 
   async deleteFeedback(id: string): Promise<{ status: number; message: string; data: any }> {
     try {
+      console.log("id is",id );
+      
       const feedback = await this.feedbackModel.findByPk(id);
       if (!feedback) {
         throw new NotFoundException('Feedback not found');
@@ -62,14 +64,26 @@ export class FeedbackService {
     }
   }
 
+
   async updateFeedback(id: string, feedbackDto: FeedbackDTO): Promise<{ status: number; message: string; data: any }> {
     try {
       const feedback = await this.feedbackModel.findByPk(id);
       if (!feedback) {
         throw new NotFoundException('Feedback not found');
       }
-      await feedback.update(feedbackDto);
-      return { status: HttpStatus.OK, message: 'Feedback updated successfully', data: null };
+  
+      // Perform partial update by iterating over provided properties
+      for (const key in feedbackDto) {
+        if (Object.prototype.hasOwnProperty.call(feedbackDto, key)) {
+          feedback[key] = feedbackDto[key];
+        }
+      }
+      
+      // Save the updated feedback
+      await feedback.save();
+  
+      // Return the updated feedback data
+      return { status: HttpStatus.OK, message: 'Feedback updated successfully', data: feedback };
     } catch (error) {
       this.logger.error(`Error occurred while updating feedback: ${error.message}`);
       throw { status: HttpStatus.INTERNAL_SERVER_ERROR, message: 'Failed to update feedback' };
