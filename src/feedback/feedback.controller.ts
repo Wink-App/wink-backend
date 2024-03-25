@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards, Patch } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UserRole } from 'src/auth/enum/userRoles.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -50,13 +50,16 @@ export class FeedbackController {
     }
   }
 
-  @Put(':id')
+  @Patch(':id')
   async update(@Param('id') id: string, @Body() feedbackDto: FeedbackDTO): Promise<{ status: number; message: string; data: any }> {
     try {
+    
+      
       const result = await this.feedbackService.updateFeedback(id, feedbackDto);
       return { status: result.status, message: result.message, data: result.data };
     } catch (error) {
       return { status: error.status, message: error.message, data: null };
     }
   }
+  
 }

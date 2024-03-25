@@ -37,9 +37,16 @@ export class OrderController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto): Promise<any> {
-    return this.orderService.updateOrder(id, updateOrderDto);
+  async update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto): Promise<{ status: number; message: string; data: any }> {
+    try {
+      const updatedOrder = await this.orderService.updateOrder(id, updateOrderDto);
+      return { status: 200, message: 'Order updated successfully', data: updatedOrder };
+    } catch (error) {
+      return { status: error.status || 500, message: error.message || 'Error updating order', data: null };
+    }
   }
+  
+  
 
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<any> {

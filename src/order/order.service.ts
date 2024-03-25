@@ -161,16 +161,14 @@ export class OrderService {
   
       // Update the order with the new data
       await order.update(updateOrderDto);
+  
       // Find the associated tracking record
-    const tracking = await this.trackingModel.findOne({ where: { orderId: order.id } });
-
-    if (!tracking) {
-      console.log("No order found");
-      
-    } else {
-      // Update the status in the tracking record
-      await tracking.update({ status: updateOrderDto.status });
-    }
+      const tracking = await this.trackingModel.findOne({ where: { orderId: order.id } });
+      if (tracking) {
+        // Update the status in the tracking record
+        await tracking.update({ status: updateOrderDto.status });
+      }
+  
       // Check if the status has changed
       if (previousStatus !== updateOrderDto.status) {
         // Send notification
@@ -184,11 +182,15 @@ export class OrderService {
           },
         });
       }
+  
+      // Return the updated order object
+      return order;
     } catch (error) {
       this.logger.error(`Error updating order with id ${id}`, error);
       throw new NotFoundException('Error updating order');
     }
   }
+  
   
   async deleteOrder(id: string): Promise<any> {
     try {
